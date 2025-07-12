@@ -1,11 +1,10 @@
 package com.mySkin.resources;
 
 
-import com.mySkin.dtos.SkinDTO;
-import com.mySkin.services.SkinService;
+import com.mySkin.dtos.ReviewDTO;
+import com.mySkin.services.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,46 +15,47 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/skin")
-public class SkinResource {
+@RequestMapping(value = "/review")
+public class ReviewResource {
 
     @Autowired
-    private SkinService skinService;
+    private ReviewService reviewService;
 
-
-    //findAll
+    //find all
     @Operation(
-            description = "Get all skins",
-            summary = "Get all skins",
+            description = "Get all reviews",
+            summary = "Get all reviews",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200")
             }
     )
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<SkinDTO>> findAll(Pageable pageable) {
-        Page<SkinDTO> skins = skinService.findAll(pageable);
-        return ResponseEntity.ok(skins);
+    public ResponseEntity<Page<ReviewDTO>> findAll(Pageable pageable) {
+        Page<ReviewDTO> reviews = reviewService.findAll(pageable);
+        return ResponseEntity.ok(reviews);
     }
+
 
     //findById
     @Operation(
-            description = "Get a skin",
-            summary = "Get a skin by its id",
+            description = "Get a review",
+            summary = "Get a review by its id",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Not found", responseCode = "404")
             }
     )
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<SkinDTO> findById(@PathVariable Long id) {
-        SkinDTO skin = skinService.findById(id);
-        return ResponseEntity.ok(skin);
+    public ResponseEntity<ReviewDTO> findById(@PathVariable Long id) {
+        ReviewDTO review = reviewService.findById(id);
+        return ResponseEntity.ok(review);
     }
+
 
     //insert
     @Operation(
-            description = "Create a new room",
-            summary = "Create a new room",
+            description = "Create a new review",
+            summary = "Create a new review",
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -64,23 +64,23 @@ public class SkinResource {
             }
     )
     @PostMapping(produces = "application/json")
-    public ResponseEntity<SkinDTO> insert(@RequestBody SkinDTO skinDTO) {
+    public ResponseEntity<ReviewDTO> insert(@RequestBody ReviewDTO reviewDTO) {
 
-        skinDTO = skinService.insert(skinDTO);
+        reviewDTO = reviewService.insert(reviewDTO);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(skinDTO.getId())
+                .buildAndExpand(reviewDTO.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(skinDTO);
+        return ResponseEntity.created(uri).body(reviewDTO);
     }
 
     //update
     @Operation(
-            description = "Update a skin",
-            summary = "Update a skin",
+            description = "Update a review",
+            summary = "Update a review",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -90,17 +90,18 @@ public class SkinResource {
             }
     )
     @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<SkinDTO> update(@PathVariable Long id, @RequestBody SkinDTO skinDTO) {
+    public ResponseEntity<ReviewDTO> update(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
 
-        skinDTO = skinService.update(skinDTO, id);
+        reviewDTO = reviewService.update(reviewDTO, id);
 
-        return ResponseEntity.ok().body(skinDTO);
+        return ResponseEntity.ok().body(reviewDTO);
     }
+
 
     //delete
     @Operation(
-            description = "Delete a skin",
-            summary = "Delete a skin",
+            description = "Delete a review",
+            summary = "Delete a review",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -112,15 +113,16 @@ public class SkinResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        skinService.delete(id);
+        reviewService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
 
+
     //delete all
     @Operation(
-            description = "Delete all skins",
-            summary = "Delete all skins",
+            description = "Delete all reviews",
+            summary = "Delete all reviews",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -132,7 +134,7 @@ public class SkinResource {
     @DeleteMapping
     public ResponseEntity<Void> deleteAllRooms() {
 
-        skinService.deleteAllRooms();
+        reviewService.deleteAllRooms();
         return ResponseEntity.noContent().build();
     }
 }

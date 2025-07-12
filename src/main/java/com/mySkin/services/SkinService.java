@@ -26,9 +26,8 @@ public class SkinService {
     @Transactional(readOnly = true)
     public SkinDTO findById(Long id) {
         Optional<Skin> skin = skinRepository.findById(id);
-        SkinDTO skinDTO =  new SkinDTO(skin.get());
 
-        return skinDTO;
+        return new SkinDTO(skin.get());
     }
 
     @Transactional
@@ -46,13 +45,13 @@ public class SkinService {
     }
 
     @Transactional
-    public SkinDTO update(SkinDTO roomDTO, Long id) {
+    public SkinDTO update(SkinDTO skinDTO, Long id) {
         Skin entity = skinRepository.getReferenceById(id);
 
-        entity.setTipo(roomDTO.getTipo());
-        entity.setMelasma(roomDTO.isMelasma());
-        entity.setRosacea(roomDTO.isRosacea());
-        entity.setSensivel(roomDTO.isSensivel());
+        entity.setTipo(skinDTO.getTipo());
+        entity.setMelasma(skinDTO.isMelasma());
+        entity.setRosacea(skinDTO.isRosacea());
+        entity.setSensivel(skinDTO.isSensivel());
         entity = skinRepository.save(entity);
 
         return new SkinDTO(entity);

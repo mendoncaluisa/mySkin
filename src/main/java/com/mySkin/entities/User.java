@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Table(name = "tb_user")
+@Table(name = "users")
 @Entity
 public class User {
 
@@ -37,7 +37,7 @@ public class User {
 
     @Getter @Setter
     @ManyToMany
-    @JoinTable(name = "tb_user_role",
+    @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();

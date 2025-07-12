@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tb_skin")
+@Table(name = "skin")
 public class Skin {
 
     @Getter @Setter

@@ -26,9 +26,9 @@ public class UserDTO {
 
     private LocalDate birthDate;
 
-    SkinDTO skin = new SkinDTO();
+    private SkinDTO skin = new SkinDTO();
 
-    Set<RoleDTO> roles = new HashSet<>();
+    private Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {
     }
