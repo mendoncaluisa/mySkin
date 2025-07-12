@@ -78,10 +78,11 @@ public class IngredientService {
     @Transactional
     public void delete(Long id) {
         ingredientRepository.deleteById(id);
+
     }
 
     @Transactional
-    public void deleteAllRooms() {
+    public void deleteAllIngredients() {
         ingredientRepository.deleteAll();
     }
 }

@@ -130,9 +130,9 @@ public class SkinResource {
             }
     )
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllRooms() {
+    public ResponseEntity<Void> deleteAllSkins() {
 
-        skinService.deleteAllRooms();
+        skinService.deleteAllSkins();
         return ResponseEntity.noContent().build();
     }
 }
