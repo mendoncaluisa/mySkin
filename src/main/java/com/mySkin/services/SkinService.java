@@ -63,7 +63,7 @@ public class SkinService {
     }
 
     @Transactional
-    public void deleteAllRooms() {
+    public void deleteAllSkins() {
         skinRepository.deleteAll();
     }
 }

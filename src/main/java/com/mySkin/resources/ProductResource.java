@@ -133,9 +133,9 @@ public class ProductResource {
             }
     )
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllRooms() {
+    public ResponseEntity<Void> deleteAllIngredients() {
 
-        productService.deleteAllRooms();
+        productService.deleteAllIngredients();
         return ResponseEntity.noContent().build();
     }
 }

@@ -75,7 +75,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteAllRooms() {
+    public void deleteAllIngredients() {
         productRepository.deleteAll();
     }
 }

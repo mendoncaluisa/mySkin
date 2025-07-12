@@ -87,9 +87,9 @@ INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Desi
 
 INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Muito confortável', 'Poucas opções de cor', 4.1, 8, 3);
 
-INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Tamanho perfeito', 'Chegou atrasado', 3.6, 9);
+INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Tamanho perfeito', 'Chegou atrasado', 3.6, 9, 1);
 
-INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Excelente performance', 'Bateria acaba rápido', 4.3, 10);
+INSERT INTO review (positive, negative, rate, user_id, product_id) VALUES ('Excelente performance', 'Bateria acaba rápido', 4.3, 10, 2);
 
 
 
