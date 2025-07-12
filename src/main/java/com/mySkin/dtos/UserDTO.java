@@ -3,37 +3,31 @@ package com.mySkin.dtos;
 import com.mySkin.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+@Data
 public class UserDTO {
 
-    @Getter @Setter
     private Long id;
 
-    @Getter @Setter
     @NotBlank(message = "Campo obrigatório")
     private String name;
 
-    @Getter @Setter
     @NotBlank(message = "Campo obrigatório")
     private String username;
 
-    @Getter @Setter
     @Email(message = "Favor, informar um e-mail válido")
     private String email;
 
-    @Getter @Setter
     private LocalDate birthDate;
 
-    @Getter @Setter
     SkinDTO skin = new SkinDTO();
 
-    @Getter @Setter
     Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {
@@ -53,10 +47,8 @@ public class UserDTO {
         this.username = entity.getUsername();
         this.email = entity.getEmail();
         this.birthDate = entity.getBirthDate();
-        entity.getRoles().
-                forEach(
-                        role -> this.roles.add(new RoleDTO(role)));
-        //todo: por skinDTO
+        this.skin = new SkinDTO(entity.getSkin());
+        this.roles = entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()); //mapeia cada um dos roles para um novo dto
     }
 
 }

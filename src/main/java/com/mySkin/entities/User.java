@@ -44,7 +44,7 @@ public class User {
 
 
     @Getter @Setter
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_skin")
     private Skin skin = new Skin();
 
@@ -58,6 +58,7 @@ public class User {
         this.name = userDTO.getName();
         this.email = userDTO.getEmail();
         this.birthDate = userDTO.getBirthDate();
+
 
     }
 

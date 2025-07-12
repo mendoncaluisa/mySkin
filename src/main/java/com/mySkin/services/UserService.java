@@ -4,6 +4,7 @@ import com.mySkin.dtos.RoleDTO;
 import com.mySkin.dtos.UserDTO;
 import com.mySkin.dtos.UserInsertDTO;
 import com.mySkin.entities.Role;
+import com.mySkin.entities.Skin;
 import com.mySkin.entities.User;
 import com.mySkin.repository.RoleRepository;
 import com.mySkin.repository.UserRepository;
@@ -59,7 +60,7 @@ public class UserService {
         entity.setUsername(dto.getUsername());
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
-        //todo: por skin
+        entity.setSkin(new Skin(dto.getSkin()));
 
         entity.getRoles().clear();
         for (RoleDTO role : dto.getRoles()) {
