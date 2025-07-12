@@ -10,32 +10,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@Setter
+@Getter
 @Table(name = "users")
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
     private Long id;
 
     @Column (unique = true)
-    @Getter @Setter
     private String username;
 
-    @Getter @Setter
     private String name;
 
-    @Getter @Setter
     private String email;
 
-    @Getter @Setter
     private String password;
 
-    @Getter @Setter
     private LocalDate birthDate;
 
-    @Getter @Setter
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,7 +38,6 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    @Getter @Setter
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_skin")
     private Skin skin = new Skin();
