@@ -1,11 +1,10 @@
 package com.mySkin.resources;
 
-
-import com.mySkin.dtos.SkinDTO;
-import com.mySkin.services.SkinService;
+import com.mySkin.dtos.CharacteristicDTO;
+import com.mySkin.dtos.ReviewDTO;
+import com.mySkin.services.CharacteristicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,49 +16,50 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/skin")
-public class SkinResource {
+@RequestMapping(value = "/characteristic")
+public class CharacteristicResource {
 
     @Autowired
-    private SkinService skinService;
+    private CharacteristicService characteristicService;
 
 
-    //findAll
+    //find all
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
-            description = "Get all skins",
-            summary = "Get all skins",
+            description = "Get all Characteristic]",
+            summary = "Get all Characteristic",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200")
             }
     )
     @GetMapping(produces = "application/json")
-    public ResponseEntity<Page<SkinDTO>> findAll(Pageable pageable) {
-        Page<SkinDTO> skins = skinService.findAll(pageable);
-        return ResponseEntity.ok(skins);
+    public ResponseEntity<Page<CharacteristicDTO>> findAll(Pageable pageable) {
+        Page<CharacteristicDTO> reviews = characteristicService.findAll(pageable);
+        return ResponseEntity.ok(reviews);
     }
 
     //findById
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
-            description = "Get a skin",
-            summary = "Get a skin by its id",
+            description = "Get a Characteristic",
+            summary = "Get a Characteristic by its id",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Not found", responseCode = "404")
             }
     )
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<SkinDTO> findById(@PathVariable Long id) {
-        SkinDTO skin = skinService.findById(id);
-        return ResponseEntity.ok(skin);
+    public ResponseEntity<CharacteristicDTO> findById(@PathVariable Long id) {
+        CharacteristicDTO review = characteristicService.findById(id);
+        return ResponseEntity.ok(review);
     }
+
 
     //insert
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
-            description = "Create a new room",
-            summary = "Create a new room",
+            description = "Create a new Characteristic",
+            summary = "Create a new Characteristic",
             responses = {
                     @ApiResponse(description = "Created", responseCode = "201"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -68,24 +68,25 @@ public class SkinResource {
             }
     )
     @PostMapping(produces = "application/json")
-    public ResponseEntity<SkinDTO> insert(@RequestBody SkinDTO skinDTO) {
+    public ResponseEntity<CharacteristicDTO> insert(@RequestBody CharacteristicDTO characteristicDTO) {
 
-        skinDTO = skinService.insert(skinDTO);
+        characteristicDTO = characteristicService.insert(characteristicDTO);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(skinDTO.getId())
+                .buildAndExpand(characteristicDTO.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(skinDTO);
+        return ResponseEntity.created(uri).body(characteristicDTO);
     }
+
 
     //update
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
-            description = "Update a skin",
-            summary = "Update a skin",
+            description = "Update a Characteristic",
+            summary = "Update a Characteristic",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -95,18 +96,19 @@ public class SkinResource {
             }
     )
     @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<SkinDTO> update(@PathVariable Long id, @RequestBody SkinDTO skinDTO) {
+    public ResponseEntity<CharacteristicDTO> update(@PathVariable Long id, @RequestBody CharacteristicDTO characteristicDTO) {
 
-        skinDTO = skinService.update(skinDTO, id);
+        characteristicDTO = characteristicService.update(characteristicDTO, id);
 
-        return ResponseEntity.ok().body(skinDTO);
+        return ResponseEntity.ok().body(characteristicDTO);
     }
+
 
     //delete
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
-            description = "Delete a skin",
-            summary = "Delete a skin",
+            description = "Delete a Characteristic",
+            summary = "Delete a Characteristic",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -118,16 +120,17 @@ public class SkinResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        skinService.delete(id);
+        characteristicService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
 
+
     //delete all
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
-            description = "Delete all skins",
-            summary = "Delete all skins",
+            description = "Delete all Characteristic",
+            summary = "Delete all Characteristic",
             responses = {
                     @ApiResponse(description = "OK", responseCode = "200"),
                     @ApiResponse(description = "Bad Request", responseCode = "400"),
@@ -137,9 +140,9 @@ public class SkinResource {
             }
     )
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllSkins() {
+    public ResponseEntity<Void> deleteAllRooms() {
 
-        skinService.deleteAllSkins();
+        characteristicService.deleteAllCharacteristics();
         return ResponseEntity.noContent().build();
     }
 }

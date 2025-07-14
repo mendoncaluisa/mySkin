@@ -3,6 +3,7 @@ package com.mySkin.resources;
 import com.mySkin.config.JwtUtil;
 import com.mySkin.entities.User;
 import com.mySkin.entities.Role;
+import com.mySkin.entities.Characteristic;
 import com.mySkin.repository.UserRepository;
 import com.mySkin.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,23 +23,34 @@ public class AuthResource {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    public static class RegisterRequest {
+        public String username;
+        public String password;
+        public String name;
+        public String email;
+        public Set<Characteristic> characteristic;
+        // getters e setters podem ser adicionados se quiser
+    }
+
     @GetMapping("/test")
     public ResponseEntity<?> test() {
         return ResponseEntity.ok("Auth endpoint funcionando!");
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         System.out.println("=== REGISTER CALLED ===");
         try {
-            String username = request.get("username");
-            String password = request.get("password");
-            String name = request.get("name");
-            String email = request.get("email");
+            String username = request.username;
+            String password = request.password;
+            String name = request.name;
+            String email = request.email;
+            Set<Characteristic> characteristic = request.characteristic;
             
             System.out.println("Username: " + username);
             System.out.println("Name: " + name);
             System.out.println("Email: " + email);
+            System.out.println("Characteristic: " + characteristic);
             
             if (username == null || password == null || name == null || email == null) {
                 return ResponseEntity.badRequest().body("Todos os campos são obrigatórios");
@@ -65,6 +77,9 @@ public class AuthResource {
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode(password));
             user.getRoles().add(userRole); // Adicionar o papel ao usuário
+            if (characteristic != null) {
+                user.getCharacteristic().addAll(characteristic);
+            }
             userRepository.save(user);
             
             return ResponseEntity.ok("Usuário cadastrado com sucesso!");
@@ -76,7 +91,7 @@ public class AuthResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> login(@RequestBody java.util.Map<String, String> request) {
         System.out.println("=== LOGIN CALLED ===");
         try {
             System.out.println("Request: " + request);
@@ -104,7 +119,7 @@ public class AuthResource {
             }
             
             String token = jwtUtil.generateToken(user.getUsername(), "ROLE_USER");
-            Map<String, String> response = Map.of("access_token", token);
+            java.util.Map<String, String> response = java.util.Map.of("access_token", token);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println("Erro no login: " + e.getMessage());

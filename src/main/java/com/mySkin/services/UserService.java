@@ -1,11 +1,13 @@
 package com.mySkin.services;
 
+import com.mySkin.dtos.CharacteristicDTO;
 import com.mySkin.dtos.RoleDTO;
 import com.mySkin.dtos.UserDTO;
 import com.mySkin.dtos.UserInsertDTO;
+import com.mySkin.entities.Characteristic;
 import com.mySkin.entities.Role;
-import com.mySkin.entities.Skin;
 import com.mySkin.entities.User;
+import com.mySkin.repository.CharacteristicRepository;
 import com.mySkin.repository.RoleRepository;
 import com.mySkin.repository.UserRepository;
 import com.mySkin.services.exceptions.DatabaseException;
@@ -36,6 +38,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CharacteristicRepository characteristicRepository;
 
     @Transactional(readOnly = true)
     public Page<UserDTO> findAll(Pageable pageable) {
@@ -73,7 +77,12 @@ public class UserService implements UserDetailsService {
         entity.setUsername(dto.getUsername());
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
-        entity.setSkin(new Skin(dto.getSkin()));
+
+        entity.getCharacteristic().clear();
+        for (CharacteristicDTO characteristic : dto.getCharacteristics()) {
+            Characteristic c = characteristicRepository.getReferenceById(characteristic.getId());
+            entity.getCharacteristic().add(c);
+        }
 
         entity.getRoles().clear();
         for (RoleDTO role : dto.getRoles()) {

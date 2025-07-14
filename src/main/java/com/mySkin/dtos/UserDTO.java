@@ -26,7 +26,7 @@ public class UserDTO {
 
     private LocalDate birthDate;
 
-    private SkinDTO skin = new SkinDTO();
+    private Set<CharacteristicDTO> characteristics = new HashSet<>();
 
     private Set<RoleDTO> roles = new HashSet<>();
 
@@ -47,8 +47,8 @@ public class UserDTO {
         this.username = entity.getUsername();
         this.email = entity.getEmail();
         this.birthDate = entity.getBirthDate();
-        this.skin = new SkinDTO(entity.getSkin());
         this.roles = entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet()); //mapeia cada um dos roles para um novo dto
+        this.characteristics = entity.getCharacteristic().stream().map(CharacteristicDTO::new).collect(Collectors.toSet()); //mapeia cada um dos roles para um novo dto
     }
 
 }

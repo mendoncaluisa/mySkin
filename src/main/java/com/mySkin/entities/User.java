@@ -46,10 +46,11 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_skin", nullable = true)
-    private Skin skin;
+    @ManyToMany
+    @JoinTable(name = "user_characteristic",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "characteristic_id"))
+    private Set<Characteristic> characteristic = new HashSet<>();
 
 
 
@@ -113,7 +114,7 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", birthDate=" + birthDate +
                 ", roles=" + roles +
-                ", skin=" + skin +
+                ", characteristic=" + characteristic +
                 '}';
     }
 }
