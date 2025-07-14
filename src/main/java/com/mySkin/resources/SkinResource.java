@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class SkinResource {
 
 
     //findAll
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get all skins",
             summary = "Get all skins",
@@ -38,6 +40,7 @@ public class SkinResource {
     }
 
     //findById
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get a skin",
             summary = "Get a skin by its id",
@@ -53,6 +56,7 @@ public class SkinResource {
     }
 
     //insert
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Create a new room",
             summary = "Create a new room",
@@ -78,6 +82,7 @@ public class SkinResource {
     }
 
     //update
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Update a skin",
             summary = "Update a skin",
@@ -98,6 +103,7 @@ public class SkinResource {
     }
 
     //delete
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Delete a skin",
             summary = "Delete a skin",
@@ -118,6 +124,7 @@ public class SkinResource {
     }
 
     //delete all
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete all skins",
             summary = "Delete all skins",

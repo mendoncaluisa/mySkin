@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ public class ReviewResource {
     private ReviewService reviewService;
 
     //find all
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get all reviews",
             summary = "Get all reviews",
@@ -37,6 +39,7 @@ public class ReviewResource {
 
 
     //findById
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get a review",
             summary = "Get a review by its id",
@@ -53,6 +56,7 @@ public class ReviewResource {
 
 
     //insert
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Create a new review",
             summary = "Create a new review",
@@ -78,6 +82,7 @@ public class ReviewResource {
     }
 
     //update
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Update a review",
             summary = "Update a review",
@@ -99,6 +104,7 @@ public class ReviewResource {
 
 
     //delete
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Delete a review",
             summary = "Delete a review",
@@ -120,6 +126,7 @@ public class ReviewResource {
 
 
     //delete all
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete all reviews",
             summary = "Delete all reviews",

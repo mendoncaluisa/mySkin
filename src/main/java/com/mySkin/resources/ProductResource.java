@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ public class ProductResource {
     private ProductService productService;
 
     //find all
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get all product",
             summary = "Get all product",
@@ -37,6 +39,7 @@ public class ProductResource {
 
 
     //findById
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get a product",
             summary = "Get a product by its id",
@@ -53,6 +56,7 @@ public class ProductResource {
 
 
     //insert
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Create a new product",
             summary = "Create a new product",
@@ -79,6 +83,7 @@ public class ProductResource {
 
 
     //update
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Update a product",
             summary = "Update a product",
@@ -100,6 +105,7 @@ public class ProductResource {
 
 
     //delete
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete a product",
             summary = "Delete a product",
@@ -121,6 +127,7 @@ public class ProductResource {
 
 
     //delete all
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete all products",
             summary = "Delete all products",

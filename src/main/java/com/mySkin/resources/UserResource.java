@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,6 +24,7 @@ public class UserResource {
     private UserService userService;
 
     //findAll
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Get all users",
             summary = "Get all users",
@@ -37,6 +39,7 @@ public class UserResource {
     }
 
     //findById
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Get a user",
             summary = "Get a user by its id",
@@ -52,6 +55,7 @@ public class UserResource {
     }
 
     //insert
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Create a new user",
             summary = "Create a new user",
@@ -75,6 +79,7 @@ public class UserResource {
     }
 
     //update
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Update a user",
             summary = "Update a user",
@@ -95,6 +100,7 @@ public class UserResource {
 
 
     //delete
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete a user",
             summary = "Delete a user",
@@ -113,6 +119,7 @@ public class UserResource {
     }
 
     //delete all users
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete all users",
             summary = "Delete all users",

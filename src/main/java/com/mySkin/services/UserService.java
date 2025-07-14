@@ -12,9 +12,13 @@ import com.mySkin.services.exceptions.DatabaseException;
 import com.mySkin.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -56,6 +61,14 @@ public class UserService {
 
         return new UserDTO(newUser);
     }
+    
+    private void copyDtoToEntity(UserInsertDTO dto, User entity) {
+        entity.setUsername(dto.getUsername());
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        // Não precisamos definir roles aqui, pois o UserInsertDTO não tem roles
+    }
+    
     private void copyDtoToEntity(UserDTO dto, User entity) {
         entity.setUsername(dto.getUsername());
         entity.setName(dto.getName());
@@ -98,6 +111,12 @@ public class UserService {
     @Transactional
     public void deleteAllUsers() {
         userRepository.deleteAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 
 }

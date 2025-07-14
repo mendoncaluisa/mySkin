@@ -22,13 +22,13 @@ public class Review {
     @Column (nullable = false)
     private Float rate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user = new User();
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product = new Product();
+    private Product product;
 
     public Review() {}
 

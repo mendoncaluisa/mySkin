@@ -26,7 +26,6 @@ INSERT INTO role (authority) VALUES ('ROLE_ADMIN');
 
 INSERT INTO role (authority) VALUES ('ROLE_USER');
 
-INSERT INTO role (authority) VALUES ('ROLE_CLIENT');
 
 /* TABELA DE USUARIOS (SEM SENHA)*/
 INSERT INTO users (username, name, email, birth_date, id_skin) VALUES ('jdoe', 'John Doe', 'john.doe@example.com', '1990-05-15', 10);
@@ -49,12 +48,20 @@ INSERT INTO users (username, name, email, birth_date, id_skin) VALUES ('hlee', '
 
 INSERT INTO users (username, name, email, birth_date, id_skin) VALUES ('ikim', 'Ivy Kim', 'ivy.kim@example.com', '1994-02-28',1);
 
+INSERT INTO users (username, name, email, birth_date, id_skin, password) VALUES ('Poliana', 'Poliana Cristina', 'poliana@gmail.com', '2000-01-17',1, '$2a$10$mqiuBJ35YDMXLKHnZ2YDFedly5HmMdx.vjJ5SMVsTtaQVpKjQ1FF2');
+
+INSERT INTO users (username, name, email, birth_date, id_skin, password) VALUES ('Maria', 'Maria Luisa', 'maria@gmail.com', '2000-12-25',1, '$2a$10$mqiuBJ35YDMXLKHnZ2YDFedly5HmMdx.vjJ5SMVsTtaQVpKjQ1FF2');
+
 /* INSERINDO RELACIONAMENTO DE PAPEIS COM USUARIOS */
 INSERT INTO user_role (user_id, role_id) VALUES (1,1);
 
 INSERT INTO user_role (user_id, role_id) VALUES (2,1);
 
 INSERT INTO user_role (user_id, role_id) VALUES (2,2);
+
+INSERT INTO user_role (user_id, role_id) VALUES (11,1);
+
+INSERT INTO user_role (user_id, role_id) VALUES (12,1);
 
 
 
