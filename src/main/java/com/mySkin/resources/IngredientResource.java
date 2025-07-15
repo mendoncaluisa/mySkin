@@ -119,7 +119,7 @@ public class IngredientResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        ingredientService.delete(id);
+        ingredientService.deleteIngredientAndProducts(id);
 
         return ResponseEntity.noContent().build();
     }
