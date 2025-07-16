@@ -2,9 +2,10 @@ package com.mySkin.dtos;
 
 import com.mySkin.entities.Characteristic;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
 
 @Data
-public class CharacteristicDTO {
+public class CharacteristicDTO extends RepresentationModel<CharacteristicDTO> {
 
     private Long id;
 
@@ -22,4 +23,8 @@ public class CharacteristicDTO {
         this.description = characteristic.getDescription();
     }
 
+    public CharacteristicDTO(CharacteristicDTO characteristicDTO) {
+        this.id = characteristicDTO.getId();
+        this.description = characteristicDTO.getDescription();
+    }
 }

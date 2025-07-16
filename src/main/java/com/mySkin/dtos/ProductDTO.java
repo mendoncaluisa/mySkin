@@ -6,9 +6,11 @@ import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.hateoas.RepresentationModel;
+
 
 @Data
-public class ProductDTO {
+public class ProductDTO extends RepresentationModel<ProductDTO> {
 
     private Long id;
 
@@ -39,5 +41,13 @@ public class ProductDTO {
         this.description = product.getDescription();
         this.company = product.getCompany();
         this.size = product.getSize();
+    }
+
+    public ProductDTO(ProductDTO productDTO) {
+        this.id = productDTO.id;
+        this.name = productDTO.name;
+        this.description = productDTO.description;
+        this.company = productDTO.company;
+        this.size = productDTO.size;
     }
 }

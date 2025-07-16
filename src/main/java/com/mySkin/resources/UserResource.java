@@ -1,5 +1,7 @@
 package com.mySkin.resources;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.mySkin.dtos.UserDTO;
 import com.mySkin.dtos.UserInsertDTO;
 import com.mySkin.services.UserService;

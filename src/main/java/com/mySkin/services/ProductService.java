@@ -6,6 +6,7 @@ import com.mySkin.entities.Product;
 import com.mySkin.entities.Review;
 import com.mySkin.entities.User;
 import com.mySkin.repository.ProductRepository;
+import com.mySkin.resources.ProductResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class ProductService {
@@ -23,7 +27,9 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(Pageable pageable) {
         Page<Product> list = productRepository.findAll(pageable);
-        return list.map(p -> new ProductDTO(p));
+        return list.map(p -> new ProductDTO(p)
+                .add(linkTo(methodOn(ProductResource.class).findAll(null)).withSelfRel())
+                .add(linkTo(methodOn(ProductResource.class).findById(p.getId())).withRel("One product")));
     }
 
     @Transactional(readOnly = true)
@@ -31,7 +37,11 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
         ProductDTO productDTO =  new ProductDTO(product.get());
 
-        return productDTO;
+        return productDTO
+                .add(linkTo(methodOn(ProductResource.class).findById(id)).withSelfRel())
+                .add(linkTo(methodOn(ProductResource.class).findAll(null)).withRel("All Products"))
+                .add(linkTo(methodOn(ProductResource.class).update(id, new ProductDTO(productDTO))).withRel("Update product"))
+                .add(linkTo(methodOn(ProductResource.class).delete(id)).withRel("Delete"));
     }
 
     @Transactional
@@ -48,7 +58,11 @@ public class ProductService {
 
         entity = productRepository.save(entity);
 
-        return new ProductDTO(entity);
+        return new ProductDTO(entity)
+                .add(linkTo(methodOn(ProductResource.class).findById(productDTO.getId())).withRel("Product"))
+                .add(linkTo(methodOn(ProductResource.class).findAll(null)).withRel("All Products"))
+                .add(linkTo(methodOn(ProductResource.class).update(productDTO.getId(), new ProductDTO(productDTO))).withRel("Update product"))
+                .add(linkTo(methodOn(ProductResource.class).delete(productDTO.getId())).withRel("Delete"));
 
     }
 
@@ -66,7 +80,9 @@ public class ProductService {
 
         entity = productRepository.save(entity);
 
-        return new ProductDTO(entity);
+        return new ProductDTO(entity)
+                .add(linkTo(methodOn(ProductResource.class).findById(entity.getId())).withRel("One Product"))
+                .add(linkTo(methodOn(ProductResource.class).delete(null)).withRel("Delete Products"));
     }
 
     @Transactional

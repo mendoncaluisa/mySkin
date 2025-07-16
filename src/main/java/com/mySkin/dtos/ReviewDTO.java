@@ -3,9 +3,13 @@ package com.mySkin.dtos;
 import com.mySkin.entities.Product;
 import com.mySkin.entities.Review;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.util.Optional;
+
 
 @Data
-public class ReviewDTO {
+public class ReviewDTO extends RepresentationModel<ReviewDTO> {
 
     private Long id;
 
@@ -38,4 +42,5 @@ public class ReviewDTO {
     }
 
     public ReviewDTO() {}
+
 }

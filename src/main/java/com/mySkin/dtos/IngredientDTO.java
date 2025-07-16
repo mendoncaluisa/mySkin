@@ -3,9 +3,11 @@ package com.mySkin.dtos;
 import com.mySkin.entities.Ingredient;
 import com.mySkin.entities.Product;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
+
 
 @Data
-public class IngredientDTO {
+public class IngredientDTO extends RepresentationModel<IngredientDTO> {
 
     private Long id;
 
@@ -57,5 +59,19 @@ public class IngredientDTO {
         this.estrutura = estrutura;
         this.funcaoQuimica = funcaoQuimica;
         this.ligacaoQuimica = ligacaoQuimica;
+    }
+
+    public IngredientDTO(IngredientDTO ingredientDTO) {
+        this.id = ingredientDTO.id;
+        this.nome = ingredientDTO.nome;
+        this.descricao = ingredientDTO.descricao;
+        this.funcao = ingredientDTO.funcao;
+        this.origem = ingredientDTO.origem;
+        this.seguro = ingredientDTO.seguro;
+        this.comedogenico = ingredientDTO.comedogenico;
+        this.potIrritante = ingredientDTO.isPotIrritante();
+        this.estrutura = ingredientDTO.estrutura;
+        this.funcaoQuimica = ingredientDTO.funcaoQuimica;
+        this.ligacaoQuimica = ingredientDTO.ligacaoQuimica;
     }
 }

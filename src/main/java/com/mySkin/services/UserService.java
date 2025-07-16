@@ -1,15 +1,14 @@
 package com.mySkin.services;
 
-import com.mySkin.dtos.CharacteristicDTO;
-import com.mySkin.dtos.RoleDTO;
-import com.mySkin.dtos.UserDTO;
-import com.mySkin.dtos.UserInsertDTO;
+import com.mySkin.dtos.*;
 import com.mySkin.entities.Characteristic;
 import com.mySkin.entities.Role;
 import com.mySkin.entities.User;
 import com.mySkin.repository.CharacteristicRepository;
 import com.mySkin.repository.RoleRepository;
 import com.mySkin.repository.UserRepository;
+import com.mySkin.resources.ProductResource;
+import com.mySkin.resources.UserResource;
 import com.mySkin.services.exceptions.DatabaseException;
 import com.mySkin.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Optional;
 
@@ -44,7 +45,9 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public Page<UserDTO> findAll(Pageable pageable) {
         Page<User> list = userRepository.findAll(pageable);
-        return list.map(u -> new UserDTO(u));
+        return list.map(u -> new UserDTO(u)
+                .add(linkTo(methodOn(UserResource.class).findAll(null)).withSelfRel())
+                .add(linkTo(methodOn(UserResource.class).findById(u.getId())).withRel("One user")));
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +55,11 @@ public class UserService implements UserDetailsService {
         Optional<User> opt = userRepository.findById(id);
         User user = opt.orElseThrow(() -> new ResourceNotFound("Usuário não encontrado"));
 
-        return new UserDTO(user);
+        return new UserDTO(user)
+                .add(linkTo(methodOn(UserResource.class).findById(user.getId())).withSelfRel())
+                .add(linkTo(methodOn(UserResource.class).findAll(null)).withRel("All Users"))
+                .add(linkTo(methodOn(UserResource.class).update(user.getId(), new UserDTO(user))).withRel("Update"))
+                .add(linkTo(methodOn(UserResource.class).delete(user.getId())).withRel("Delete"));
     }
 
     @Transactional
@@ -61,9 +68,13 @@ public class UserService implements UserDetailsService {
         copyDtoToEntity(dto, entity);
         entity.setPassword(
                 passwordEncoder.encode(dto.getPassword()));
-        User newUser = userRepository.save(entity);
+        User user = userRepository.save(entity);
 
-        return new UserDTO(newUser);
+        return new UserDTO(user)
+                .add(linkTo(methodOn(UserResource.class).findById(user.getId())).withRel("One User"))
+                .add(linkTo(methodOn(UserResource.class).findAll(null)).withRel("All Users"))
+                .add(linkTo(methodOn(UserResource.class).update(user.getId(), new UserDTO(user))).withRel("Update"))
+                .add(linkTo(methodOn(UserResource.class).delete(user.getId())).withRel("Delete"));
     }
     
     private void copyDtoToEntity(UserInsertDTO dto, User entity) {
@@ -94,11 +105,14 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDTO update(Long id, UserDTO dto) {
         try {
-            User entity = userRepository.getReferenceById(id);
-            copyDtoToEntity(dto, entity);
+            User user = userRepository.getReferenceById(id);
+            copyDtoToEntity(dto, user);
 
-            entity = userRepository.save(entity);
-            return new UserDTO(entity);
+            user = userRepository.save(user);
+            return new UserDTO(user)
+                    .add(linkTo(methodOn(UserResource.class).findById(user.getId())).withRel("One User"))
+                    .add(linkTo(methodOn(UserResource.class).delete(null)).withRel("Delete Users"));
+
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFound("Usuário com id: " + id + " não encontrado");
         }

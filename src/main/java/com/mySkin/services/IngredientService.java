@@ -5,12 +5,15 @@ import com.mySkin.entities.Ingredient;
 import com.mySkin.entities.Product;
 import com.mySkin.repository.IngredientRepository;
 import com.mySkin.repository.ProductRepository;
+import com.mySkin.resources.IngredientResource;
+import com.mySkin.resources.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +29,9 @@ public class IngredientService {
     @Transactional(readOnly = true)
     public Page<IngredientDTO> findAll(Pageable pageable) {
         Page<Ingredient> list = ingredientRepository.findAll(pageable);
-        return list.map(p -> new IngredientDTO(p));
+        return list.map(p -> new IngredientDTO(p)
+                .add(linkTo(methodOn(IngredientResource.class).findAll(null)).withSelfRel())
+                .add(linkTo(methodOn(IngredientResource.class).findById(p.getId())).withRel("One ingredient")));
     }
 
     @Transactional(readOnly = true)
@@ -34,7 +39,11 @@ public class IngredientService {
         Optional<Ingredient> ingredient = ingredientRepository.findById(id);
         IngredientDTO ingredientDTO =  new IngredientDTO(ingredient.get());
 
-        return ingredientDTO;
+        return ingredientDTO
+                .add(linkTo(methodOn(IngredientResource.class).findById(ingredientDTO.getId())).withSelfRel())
+                .add(linkTo(methodOn(IngredientResource.class).findAll(null)).withRel("All ingredients"))
+                .add(linkTo(methodOn(IngredientResource.class).update(ingredientDTO.getId(), new IngredientDTO(ingredientDTO))).withRel("Update ingredient"))
+                .add(linkTo(methodOn(IngredientResource.class).delete(ingredientDTO.getId())).withRel("Delete ingredient"));
     }
 
 
@@ -55,7 +64,11 @@ public class IngredientService {
 
         entity = ingredientRepository.save(entity);
 
-        return new IngredientDTO(entity);
+        return new IngredientDTO(entity)
+                .add(linkTo(methodOn(IngredientResource.class).findById(entity.getId())).withRel("One Ingredient"))
+                .add(linkTo(methodOn(IngredientResource.class).findAll(null)).withRel("All ingredients"))
+                .add(linkTo(methodOn(IngredientResource.class).update(entity.getId(), new IngredientDTO(entity))).withRel("Update ingredient"))
+                .add(linkTo(methodOn(IngredientResource.class).delete(entity.getId())).withRel("Delete ingredient"));
 
     }
 
@@ -77,7 +90,9 @@ public class IngredientService {
 
         entity = ingredientRepository.save(entity);
 
-        return new IngredientDTO(entity);
+        return new IngredientDTO(entity)
+                .add(linkTo(methodOn(IngredientResource.class).findById(entity.getId())).withRel("One Ingredient"))
+                .add(linkTo(methodOn(IngredientResource.class).delete(null)).withRel("Delete ingredients"));
 
     }
 

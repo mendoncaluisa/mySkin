@@ -1,7 +1,8 @@
 package com.mySkin.resources;
 
 import com.mySkin.dtos.CharacteristicDTO;
-import com.mySkin.dtos.ReviewDTO;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.mySkin.services.CharacteristicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,8 +35,8 @@ public class CharacteristicResource {
     )
     @GetMapping(produces = "application/json")
     public ResponseEntity<Page<CharacteristicDTO>> findAll(Pageable pageable) {
-        Page<CharacteristicDTO> reviews = characteristicService.findAll(pageable);
-        return ResponseEntity.ok(reviews);
+        Page<CharacteristicDTO> characteristic = characteristicService.findAll(pageable);
+        return ResponseEntity.ok(characteristic);
     }
 
     //findById

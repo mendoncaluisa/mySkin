@@ -1,7 +1,8 @@
 package com.mySkin.resources;
 
 import com.mySkin.dtos.ProductDTO;
-import com.mySkin.dtos.ReviewDTO;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import com.mySkin.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

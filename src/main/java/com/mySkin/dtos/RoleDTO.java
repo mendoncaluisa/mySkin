@@ -3,8 +3,9 @@ package com.mySkin.dtos;
 import com.mySkin.entities.Role;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.hateoas.RepresentationModel;
 
-public class RoleDTO {
+public class RoleDTO extends RepresentationModel<RoleDTO> {
 
     @Getter @Setter
     private Long id;

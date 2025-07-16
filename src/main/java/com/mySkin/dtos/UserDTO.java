@@ -4,6 +4,8 @@ import com.mySkin.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.hateoas.RepresentationModel;
+
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -11,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO> {
 
     private Long id;
 
