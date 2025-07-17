@@ -6,6 +6,7 @@ import com.mySkin.entities.Product;
 import com.mySkin.entities.Review;
 import com.mySkin.entities.User;
 import com.mySkin.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,12 @@ public class ProductService {
         ProductDTO productDTO =  new ProductDTO(product.get());
 
         return productDTO;
+    }
+
+    @Transactional(readOnly = true)
+    public Product findEntityById(Long id) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
 
     @Transactional
@@ -71,6 +78,9 @@ public class ProductService {
 
     @Transactional
     public void delete(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Produto não encontrado");
+        }
         productRepository.deleteById(id);
     }
 

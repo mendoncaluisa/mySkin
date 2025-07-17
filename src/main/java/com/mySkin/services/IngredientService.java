@@ -5,6 +5,7 @@ import com.mySkin.entities.Ingredient;
 import com.mySkin.entities.Product;
 import com.mySkin.repository.IngredientRepository;
 import com.mySkin.repository.ProductRepository;
+import com.mySkin.services.exceptions.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @Service
 public class IngredientService {
@@ -32,9 +34,8 @@ public class IngredientService {
     @Transactional(readOnly = true)
     public IngredientDTO findById(Long id) {
         Optional<Ingredient> ingredient = ingredientRepository.findById(id);
-        IngredientDTO ingredientDTO =  new IngredientDTO(ingredient.get());
-
-        return ingredientDTO;
+        Ingredient entity = ingredient.orElseThrow(() -> new ResourceNotFound("Ingrediente não encontrado"));
+        return new IngredientDTO(entity);
     }
 
 
@@ -62,7 +63,8 @@ public class IngredientService {
 
     @Transactional
     public IngredientDTO update(IngredientDTO ingredientDTO, Long id) {
-        Ingredient entity = ingredientRepository.getReferenceById(id);
+        Ingredient entity = ingredientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Ingrediente não encontrado"));
 
         entity.setComedogenico(ingredientDTO.isComedogenico());
         entity.setEstrutura(ingredientDTO.getEstrutura());
@@ -84,7 +86,7 @@ public class IngredientService {
     @Transactional
     public void deleteIngredientAndProducts(Long ingredientId) {
         Ingredient ingredient = ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new RuntimeException("Ingrediente não encontrado"));
+                .orElseThrow(() -> new ResourceNotFound("Ingrediente não encontrado"));
 
         // Buscar todos os produtos que usam esse ingrediente
         List<Product> products = productRepository.findAllByIngredientsContaining(ingredient);

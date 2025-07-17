@@ -37,7 +37,6 @@ public class Review {
         this.positive = reviewDTO.getPositive();
         this.negative = reviewDTO.getNegative();
         this.rate = reviewDTO.getRate();
-        this.user = new User();
     }
 
     public Review(Long id, String positive, String negative, Float rate, User user, Product product) {

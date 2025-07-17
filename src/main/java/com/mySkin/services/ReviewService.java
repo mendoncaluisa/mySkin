@@ -6,6 +6,7 @@ import com.mySkin.entities.Product;
 import com.mySkin.entities.Review;
 import com.mySkin.entities.User;
 import com.mySkin.repository.ReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,12 @@ public class ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProductService productService;
 
     @Transactional(readOnly = true)
     public Page<ReviewDTO> findAll(Pageable pageable) {
@@ -41,12 +48,16 @@ public class ReviewService {
         entity.setRate(reviewDTO.getRate());
         entity.setNegative(reviewDTO.getNegative());
         entity.setPositive(reviewDTO.getPositive());
-        entity.setUser(new User(reviewDTO.getUser()));
-        entity.setProduct(new Product(reviewDTO.getProduct()));
+
+        // Buscar entidades persistidas pelo ID
+        User user = userService.findEntityById(reviewDTO.getUser_id());
+        Product product = productService.findEntityById(reviewDTO.getProduct_id());
+
+        entity.setUser(user);
+        entity.setProduct(product);
         reviewRepository.save(entity);
 
         return new ReviewDTO(entity);
-
     }
 
     @Transactional
@@ -56,8 +67,13 @@ public class ReviewService {
         entity.setRate(reviewDTO.getRate());
         entity.setNegative(reviewDTO.getNegative());
         entity.setPositive(reviewDTO.getPositive());
-        entity.setUser(new User(reviewDTO.getUser()));
-        entity.setProduct(new Product(reviewDTO.getProduct()));
+
+        // Buscar entidades persistidas pelo ID
+        User user = userService.findEntityById(reviewDTO.getUser_id());
+        Product product = productService.findEntityById(reviewDTO.getProduct_id());
+
+        entity.setUser(user);
+        entity.setProduct(product);
         entity = reviewRepository.save(entity);
 
         return new ReviewDTO(entity);
@@ -65,6 +81,9 @@ public class ReviewService {
 
     @Transactional
     public void delete(Long id) {
+        if (!reviewRepository.existsById(id)) {
+            throw new EntityNotFoundException("Review não encontrado");
+        }
         reviewRepository.deleteById(id);
     }
 

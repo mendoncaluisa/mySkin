@@ -55,6 +55,12 @@ public class UserService implements UserDetailsService {
         return new UserDTO(user);
     }
 
+    @Transactional(readOnly = true)
+    public User findEntityById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFound("Usuário não encontrado"));
+    }
+
     @Transactional
     public UserDTO insert(UserInsertDTO dto) {
         User entity = new User();

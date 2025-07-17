@@ -5,6 +5,7 @@ import com.mySkin.dtos.IngredientDTO;
 import com.mySkin.dtos.ReviewDTO;
 import com.mySkin.entities.*;
 import com.mySkin.repository.CharacteristicRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,9 @@ public class CharacteristicService {
 
     @Transactional
     public void delete(Long id) {
+        if (!characteristicRepository.existsById(id)) {
+            throw new EntityNotFoundException("Característica não encontrada");
+        }
         characteristicRepository.deleteById(id);
     }
 
