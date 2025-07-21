@@ -31,6 +31,10 @@ public class Product {
         inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient> ingredients = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews = new HashSet<>();
+
+
     public Product(Long id, String name, String description, String company, Double size, Set<Ingredient> ingredients) {
         this.id = id;
         this.name = name;

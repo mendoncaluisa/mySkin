@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,6 +22,7 @@ public class IngredientResource {
     private IngredientService ingredientService;
 
     //find all
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get all ingredients",
             summary = "Get all ingredients",
@@ -36,6 +38,7 @@ public class IngredientResource {
 
 
     //findById
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @Operation(
             description = "Get a ingredient",
             summary = "Get a ingredient by its id",
@@ -52,6 +55,7 @@ public class IngredientResource {
 
 
     //insert
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Create a new ingredient",
             summary = "Create a new ingredient",
@@ -78,6 +82,7 @@ public class IngredientResource {
 
 
     //update
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Update a ingredient",
             summary = "Update a ingredient",
@@ -99,6 +104,7 @@ public class IngredientResource {
 
 
     //delete
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete a ingredient",
             summary = "Delete a ingredient",
@@ -113,13 +119,14 @@ public class IngredientResource {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        ingredientService.delete(id);
+        ingredientService.deleteIngredientAndProducts(id);
 
         return ResponseEntity.noContent().build();
     }
 
 
     //delete all
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             description = "Delete all ingredients",
             summary = "Delete all ingredients",
